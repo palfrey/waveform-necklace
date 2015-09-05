@@ -2,6 +2,33 @@ from scikits.audiolab import wavread
 import math
 import svgwrite
 import xml.etree.ElementTree as etree
+from flask import Flask, render_template, request, redirect, send_file
+from werkzeug import secure_filename
+import os, os.path
+from StringIO import StringIO
+
+app = Flask(__name__)
+upload_path = os.environ.get("UPLOAD_PATH", "/tmp")
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/upload-audio', methods=['POST'])
+def upload():
+	file = request.files['audio']
+	filename = secure_filename(file.filename)
+	fullpath = os.path.join(upload_path, filename)
+	file.save(fullpath)
+	try:
+		xml = StringIO(createNecklace(fullpath, 27))
+		fname = filename + ".svg"
+		return send_file(xml, as_attachment = True, attachment_filename = fname)
+	except IOError, e:
+		print e
+		return redirect("https://http.cat/415") # unsupported media type
+	finally:
+		os.unlink(fullpath)
 
 def createNecklace(filename, samples):
 	data, fs, enc = wavread(filename)
@@ -86,9 +113,4 @@ def createNecklace(filename, samples):
 	return etree.tostring(root)
 
 if __name__ == "__main__":
-	import sys
-	samples = int(sys.argv[2])
-	filename = sys.argv[1]
-	xml = createNecklace(filename, samples)
-	fname = filename.replace("wav", "svg")
-	open(fname, "w").write(xml)
+	app.run(debug=True)

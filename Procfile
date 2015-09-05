@@ -1,1 +1,1 @@
-web: python necklace.py
+web: gunicorn necklace:app --log-file=-
