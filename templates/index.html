@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Waveform necklace</title>
+		<title>Waveform Necklace as a Service</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="">
 		<meta name="author" content="">
@@ -52,25 +52,37 @@
 		<div class="container-fluid">
 			<div class="row-fluid">
 				<div class="hero-unit span8 offset2">
-					<h1>Waveform necklace</h1>
+					<h1>Waveform necklace as a Service</h1>
 					<p>by Tom Parker &lt;<a href="http://www.google.com/recaptcha/mailhide/d?k=01FWTnIpHg_Jbpu87-1oEftw==&amp;c=CRNVfAlM5vUXlHx7XBXMfCf236sDfaO8hRdJkkr8GDE=" onclick="window.open('http://www.google.com/recaptcha/mailhide/d?k\07501FWTnIpHg_Jbpu87-1oEftw\75\75\46c\75CRNVfAlM5vUXlHx7XBXMfCf236sDfaO8hRdJkkr8GDE\075', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;"
 						title="Reveal this e-mail address">p...@tevp.net</a>&gt;
 						<a href="http://tevp.net">http://tevp.net</a></p>
 					<p>
 						This app generates files for Laser cutters that let you assemble necklaces/bracelets that resemble the waveforms of audio files you feed into it. It's like <a href="http://www.instructables.com/id/Waveform-Necklace-Bracelet/">this Instructable</a>,
-						but easier.
+						but easier. It generates files that can be cut by <a href="http://makerscafe.com/">MakersCAFE</a>, <a href="http://www.razorlab.co.uk/">RazorLAB</a> or <a href="https://www.ponoko.com/">Ponoko</a> (or probably your <a href="http://southlondonmakerspace.org/">neighbourhood friendly hackspace</a>)
+					</p>
+					<p>
+						The end result looks like the rings from the below if you cut it in 3mm Red acrylic:
+						<img src="static/example.jpg" />
 					</p>
 				</div>
 			</div>
 			<div class="row-fluid">
-				<div class="span2 offset5">
+				<div class="span4 offset3">
 					<form action="/upload-audio" method="POST" id="waveform-form" enctype="multipart/form-data">
-						<span class="btn btn-large btn-block btn-primary btn-file">
-							Browse for WAV file
-							<input type="file" name="audio" accept="audio/x-wav" />
-						</span>
+						<label for="samples">Ring count (the number of circles to cut)</label>
+						<select class="form-control" name="samples">
+							{% for i in range(1,41) %}
+								<option{% if i == 27 %} selected{% endif %}>{{i}}</option>
+							{% endfor %}
+						</select>
+						<br />
 						<span id="wavFile"></span>
-						<button type="submit" class="btn btn-large btn-block btn-success" id="create">Create Laser cutter file</button>
+						<span class="btn btn-large btn-primary btn-file">
+							Browse for WAV file
+							<input type="file" id="audio" name="audio" accept="audio/x-wav" />
+						</span>
+						<br />
+						<button type="submit" class="btn btn-large btn-block btn-success" id="create" name="create">Create Laser cutter file</button>
 					</form>
 				</div>
 			</div>
@@ -89,6 +101,10 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 		<script>
 			$('#create').on('click', function() {
+				if ($('#audio').get(0).files.length == 0) {
+					alert("Need to select a WAV file!");
+					return false;
+				}
 				$(this).html('Uploading file...');
 			});
 			$(document).on('change', '.btn-file :file', function() {

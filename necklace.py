@@ -28,6 +28,7 @@ def ringEncode(filename, rings):
 
 @app.route('/upload-audio', methods=['POST'])
 def upload():
+	ringCount = int(request.form["samples"])
 	file = request.files['audio']
 	if file.filename == "":
 		return redirect("/")
@@ -35,7 +36,7 @@ def upload():
 	fullpath = os.path.join(upload_path, filename)
 	file.save(fullpath)
 	try:
-		rings = createRings(fullpath, 27)
+		rings = createRings(fullpath, ringCount)
 		return redirect("/rings?" + ringEncode(filename, rings))
 	except IOError, e:
 		print e
