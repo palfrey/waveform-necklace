@@ -29,6 +29,8 @@ def ringEncode(filename, rings):
 @app.route('/upload-audio', methods=['POST'])
 def upload():
 	file = request.files['audio']
+	if file.filename == "":
+		return redirect("/")
 	filename = secure_filename(file.filename)
 	fullpath = os.path.join(upload_path, filename)
 	file.save(fullpath)
