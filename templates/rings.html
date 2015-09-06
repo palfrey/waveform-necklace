@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Waveform necklace: {{ filename }}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.0.2/css/font-awesome.min.css" rel="stylesheet">
+		<!--[if IE 7]>
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.0.2/css/font-awesome-ie7.min.css">
+		<![endif]-->
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet">
+
+		<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<h1>Waveform Necklace for {{ filename }}</h1>
+				<p>The collapsed waveform for "{{filename}}" looks like the following</p>
+				<table>
+					<tr>
+					{% for r in rings %}
+						<td style="text-align: center;">{{r}}</td>
+					{% endfor %}
+					</tr>
+				{% for s in range(steps) %}
+					<tr>
+					{% for r in rings %}
+						<td style="background: {{ "red" if r > s else "white" }}; width: 16px; height: 16px;"></td>
+					{% endfor %}
+					</tr>
+				{% endfor %}
+				</table>
+				<p>It contains the following distribution of parts</p>
+				<table class="table table-striped">
+					<tr>
+						<td>Part size number</td>
+						{% for i in range(counts.__len__()) %}
+						<td style="text-align: center;">{{i + 1}}</td>
+						{% endfor %}
+					</tr>
+					<tr>
+						<td>Part size</td>
+						{% for i in range(counts.__len__()) %}
+						<td style="text-align: center;">{{minD + (i * step)}}mm</td>
+						{% endfor %}
+					</tr>
+					<tr>
+						<td>Part count</td>
+						{% for c in counts %}
+						<td style="text-align: center;">{{c}}</td>
+						{% endfor %}
+					</tr>
+				</table>
+				<p>
+					<a href="/create-svg?{{svgQuery}}">Download SVG file</a>
+				</p>
+			</div>
+		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+	</body>
+</html>

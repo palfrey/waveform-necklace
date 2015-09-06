@@ -6,13 +6,25 @@ from flask import Flask, render_template, request, redirect, send_file
 from werkzeug import secure_filename
 import os, os.path
 from StringIO import StringIO
+from urllib import urlencode
 
 app = Flask(__name__)
 upload_path = os.environ.get("UPLOAD_PATH", "/tmp")
 
+gap = 5.0
+inner = 2.5
+width = 181
+
+minD = 5
+step = 1.5
+maxD = 21.5
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
+def ringEncode(filename, rings):
+	return "filename=%s&"%filename + urlencode([("ring", r) for r in rings])
 
 @app.route('/upload-audio', methods=['POST'])
 def upload():
@@ -21,50 +33,52 @@ def upload():
 	fullpath = os.path.join(upload_path, filename)
 	file.save(fullpath)
 	try:
-		xml = StringIO(createNecklace(fullpath, 27))
-		fname = filename + ".svg"
-		return send_file(xml, as_attachment = True, attachment_filename = fname)
+		rings = createRings(fullpath, 27)
+		return redirect("/rings?" + ringEncode(filename, rings))
 	except IOError, e:
 		print e
 		return redirect("https://http.cat/415") # unsupported media type
 	finally:
 		os.unlink(fullpath)
 
-def createNecklace(filename, samples):
+@app.route('/rings')
+def ringsPage():
+	rings = [int(x) for x in request.args.getlist("ring")]
+	filename = request.args["filename"]
+	steps = max(rings)
+	counts = [sum([1 for r in rings if r == x]) for x in range(1, steps+1)]
+	return render_template("rings.html",
+		rings = rings,
+		filename = filename,
+		counts = counts,
+		svgQuery = ringEncode(filename, rings),
+		steps = steps,
+		step = step,
+		minD = minD
+	)
+
+@app.route('/create-svg')
+def createSVG():
+	rings = [int(x) for x in request.args.getlist("ring")]
+	filename = request.args["filename"]
+	xml = StringIO(createNecklace(rings))
+	fname = filename + ".svg"
+	return send_file(xml, as_attachment = True, attachment_filename = fname)
+
+def createRings(filename, samples):
 	data, fs, enc = wavread(filename)
 	if data.ndim == 1: # mono
 		maxValues = data
 	else: # stereo
 		maxValues = data.max(axis = 1)
 	perRing = len(data)/samples
-
-	gap = 5.0
-	inner = 2.5
-	width = 181
-
-	minD = 5
-	step = 1.5
-	maxD = 21.5
 	steps = int((maxD - minD)/step) + 1
-	print steps
-
 	highest = [maxValues[(perRing*i):(perRing*(i+1))].max() for i in range(samples)]
-	print highest
 	biggest = max(highest)
 	perStep = biggest/steps
-	print perStep
-	rings = [int(math.ceil(x/perStep)) for x in highest]
-	print rings
+	return [int(math.ceil(x/perStep)) for x in highest]
 
-	rings = rings *2
-
-	counts = [sum([1 for r in rings if r == x]) for x in range(1, steps+1)]
-	print counts
-	for i in range(steps):
-		toprint = "".join(["*" if x > i else " " for x in rings])
-		print toprint
-
-	fname = filename.replace("wav", "svg")
+def createNecklace(rings):
 	dwg = svgwrite.Drawing(size = ("181mm", "181mm"))
 
 	location = [5,5]
