@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 	<head>
 		<meta charset="utf-8">
 		<title>Waveform necklace</title>
@@ -10,8 +9,8 @@
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.0.2/css/font-awesome.min.css" rel="stylesheet">
 		<!--[if IE 7]>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.0.2/css/font-awesome-ie7.min.css">
-    <![endif]-->
+	    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.0.2/css/font-awesome-ie7.min.css">
+	    <![endif]-->
 		<style>
 			body {
 				padding-top: 60px;
@@ -42,8 +41,8 @@
 
 		<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+	      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	    <![endif]-->
 	</head>
 
 	<body>
@@ -54,7 +53,8 @@
 			<div class="row-fluid">
 				<div class="hero-unit span8 offset2">
 					<h1>Waveform necklace</h1>
-					<p>by Tom Parker &lt;<a href="http://www.google.com/recaptcha/mailhide/d?k=01FWTnIpHg_Jbpu87-1oEftw==&amp;c=CRNVfAlM5vUXlHx7XBXMfCf236sDfaO8hRdJkkr8GDE=" onclick="window.open('http://www.google.com/recaptcha/mailhide/d?k\07501FWTnIpHg_Jbpu87-1oEftw\75\75\46c\75CRNVfAlM5vUXlHx7XBXMfCf236sDfaO8hRdJkkr8GDE\075', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" title="Reveal this e-mail address">p...@tevp.net</a>&gt;
+					<p>by Tom Parker &lt;<a href="http://www.google.com/recaptcha/mailhide/d?k=01FWTnIpHg_Jbpu87-1oEftw==&amp;c=CRNVfAlM5vUXlHx7XBXMfCf236sDfaO8hRdJkkr8GDE=" onclick="window.open('http://www.google.com/recaptcha/mailhide/d?k\07501FWTnIpHg_Jbpu87-1oEftw\75\75\46c\75CRNVfAlM5vUXlHx7XBXMfCf236sDfaO8hRdJkkr8GDE\075', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;"
+						title="Reveal this e-mail address">p...@tevp.net</a>&gt;
 						<a href="http://tevp.net">http://tevp.net</a></p>
 					<p>
 						This app generates files for Laser cutters that let you assemble necklaces/bracelets that resemble the waveforms of audio files you feed into it. It's like <a href="http://www.instructables.com/id/Waveform-Necklace-Bracelet/">this Instructable</a>,
@@ -88,18 +88,17 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 		<script>
-		  $('#create').on('click', function () {
-		    $(this).html('Uploading file...');
-		});
-		$(document).on('change', '.btn-file :file', function() {
-		    var input = $(this),
-		        numFiles = input.get(0).files ? input.get(0).files.length : 1,
-		        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+			$('#create').on('click', function() {
+				$(this).html('Uploading file...');
+			});
+			$(document).on('change', '.btn-file :file', function() {
+				var input = $(this),
+					numFiles = input.get(0).files ? input.get(0).files.length : 1,
+					label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
 				if (label != "")
 					label = "Chosen WAV file is: " + label;
 				$('#wavFile').html(label);
-		});
+			});
 		</script>
 	</body>
-
 </html>
