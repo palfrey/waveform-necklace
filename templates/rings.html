@@ -26,13 +26,13 @@
 				<table>
 					<tr>
 					{% for r in rings %}
-						<td style="text-align: center;">{{r}}</td>
+						<td style="text-align: center; border-right: 1px solid black;">{{r}}</td>
 					{% endfor %}
 					</tr>
 				{% for s in range(steps) %}
 					<tr>
 					{% for r in rings %}
-						<td style="background: {{ "red" if r > s else "white" }}; width: 16px; height: 16px;"></td>
+						<td style="background: {{ "red" if r > s else "white" }}; width: 16px; height: 16px; border-right: 1px solid black;"></td>
 					{% endfor %}
 					</tr>
 				{% endfor %}
