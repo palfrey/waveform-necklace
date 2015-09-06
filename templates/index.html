@@ -107,13 +107,18 @@
 				}
 				$(this).html('Uploading file...');
 			});
-			$(document).on('change', '.btn-file :file', function() {
-				var input = $(this),
-					numFiles = input.get(0).files ? input.get(0).files.length : 1,
-					label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+			function setWavLabel(input) {
+				var numFiles = input.get(0).files ? input.get(0).files.length : 1;
+				var label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
 				if (label != "")
 					label = "Chosen WAV file is: " + label;
 				$('#wavFile').html(label);
+			}
+			$(document).on('change', '.btn-file :file', function() {
+				setWavLabel($(this));
+			});
+			$(function() {
+				setWavLabel($('#audio'));
 			});
 		</script>
 	</body>
