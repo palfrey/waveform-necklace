@@ -71,7 +71,7 @@
 					<form action="/upload-audio" method="POST" id="waveform-form" enctype="multipart/form-data">
 						<label for="samples">Ring count (the number of circles to cut)</label>
 						<select class="form-control" name="samples">
-							{% for i in range(1,41) %}
+							{% for i in range(1,51) %}
 								<option{% if i == 27 %} selected{% endif %}>{{i}}</option>
 							{% endfor %}
 						</select>
