@@ -12,7 +12,7 @@ app = Flask(__name__)
 upload_path = os.environ.get("UPLOAD_PATH", "/tmp")
 
 gap = 5.0
-inner = 2.5
+inner = 1.25
 width = 181
 
 minD = 5
@@ -102,7 +102,7 @@ def createNecklace(rings):
 	                                   stroke = blue,
 	                                   fill = "none"))
 		dwg.add(dwg.circle(center = (format%(location[0] + radius), format%(location[1] + radius)),
-	                                   r = format % (inner/2.0),
+	                                   r = format % inner,
 	                                   stroke_width = "0.01mm",
 	                                   stroke = blue,
 	                                   fill = "none"))
