@@ -12,23 +12,29 @@ app = Flask(__name__)
 upload_path = os.environ.get("UPLOAD_PATH", "/tmp")
 
 gap = 5.0
-inner = 1.25
 width = 181
 
 minD = 5
 step = 1.5
 maxD = 21.5
 
+def frange(start, stop, index):
+    current = start
+    while current < stop:
+        yield current
+        current += index
+
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', frange=frange)
 
-def ringEncode(filename, rings):
-	return "filename=%s&"%filename + urlencode([("ring", r) for r in rings])
+def ringEncode(filename, inner, rings):
+	return "filename=%s&inner=%.2f&"%(filename, inner) + urlencode([("ring", r) for r in rings])
 
 @app.route('/upload-audio', methods=['POST'])
 def upload():
 	ringCount = int(request.form["samples"])
+	inner = float(request.form["inner"])
 	file = request.files['audio']
 	if file.filename == "":
 		return redirect("/")
@@ -37,7 +43,7 @@ def upload():
 	file.save(fullpath)
 	try:
 		rings = createRings(fullpath, ringCount)
-		return redirect("/rings?" + ringEncode(filename, rings))
+		return redirect("/rings?" + ringEncode(filename, inner, rings))
 	except IOError, e:
 		print e
 		return redirect("https://http.cat/415") # unsupported media type
@@ -48,13 +54,15 @@ def upload():
 def ringsPage():
 	rings = [int(x) for x in request.args.getlist("ring")]
 	filename = request.args["filename"]
+	inner = float(request.args["inner"])
 	steps = max(rings)
 	counts = [sum([1 for r in rings if r == x]) for x in range(1, steps+1)]
 	return render_template("rings.html",
 		rings = rings,
+		inner = inner,
 		filename = filename,
 		counts = counts,
-		svgQuery = ringEncode(filename, rings),
+		svgQuery = ringEncode(filename, inner, rings),
 		steps = steps,
 		step = step,
 		minD = minD
@@ -64,7 +72,8 @@ def ringsPage():
 def createSVG():
 	rings = [int(x) for x in request.args.getlist("ring")]
 	filename = request.args["filename"]
-	xml = StringIO(createNecklace(rings))
+	inner = float(request.args["inner"])
+	xml = StringIO(createNecklace(rings, inner))
 	fname = filename + ".svg"
 	return send_file(xml, as_attachment = True, attachment_filename = fname)
 
@@ -81,7 +90,7 @@ def createRings(filename, samples):
 	perStep = biggest/steps
 	return [int(math.ceil(x/perStep)) for x in highest]
 
-def createNecklace(rings):
+def createNecklace(rings, inner):
 	dwg = svgwrite.Drawing(size = ("181mm", "181mm"))
 
 	location = [5,5]
@@ -97,7 +106,7 @@ def createNecklace(rings):
 
 		radius = diameter / 2.0
 		dwg.add(dwg.circle(center = (format%(location[0] + radius), format%(location[1] + radius)),
-	                                   r = format %radius ,
+	                                   r = format % radius ,
 	                                   stroke_width = "0.01mm",
 	                                   stroke = blue,
 	                                   fill = "none"))

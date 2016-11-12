@@ -76,6 +76,13 @@
 							{% endfor %}
 						</select>
 						<br />
+						<label for="inner">Inner circle radius (of the rings) in mm</label>
+						<select class="form-control" name="inner">
+							{% for i in frange(0.5, 3.25, 0.25) %}
+								<option{% if i == 1.25 %} selected{% endif %}>{{i}}</option>
+							{% endfor %}
+						</select>
+						<br />
 						<span id="wavFile"></span>
 						<span class="btn btn-large btn-primary btn-file">
 							Browse for WAV file
