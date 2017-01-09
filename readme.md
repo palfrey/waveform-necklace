@@ -1,8 +1,14 @@
 Waveform Necklace
 =================
 
-Installation
-------------
+Docker-based quick start
+------------------------
+
+1. `docker build -t necklace .`
+2. ``docker run -it -p 5000:5000 -v `pwd`:/code necklace``
+
+Full Installation
+-----------------
 If you're running on OS X:
 
 1. brew install libsndfile
