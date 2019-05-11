@@ -1,7 +1,7 @@
 ## The following requirements were added by pip --freeze:
 Flask==0.10.1
 Jinja2==2.10.1
-MarkupSafe==0.23
+MarkupSafe==1.1.1
 Werkzeug==0.10.4
 gunicorn==19.9.0
 itsdangerous==0.24
