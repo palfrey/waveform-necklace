@@ -1,5 +1,4 @@
 update: insecure
 requirements:
   - requirements.txt
-  - conda-requirements.txt
   - mac-conda-requirements.txt
